@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { log } from 'console';
+import { ugBaseUrl, bwBaseUrl } from './../playwright.config'
+// import { log } from 'console';
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://magento.softwaretestingboard.com/');
+    await page.goto(`${ugBaseUrl}`);
 });
 
 test('Add a product to cart and randomly selects color and size', async ({ page }) => {
@@ -12,13 +13,15 @@ test('Add a product to cart and randomly selects color and size', async ({ page 
   const sizes = ["XS", "S", "M", ,"L", "XL"]
   var random_size = String(sizes[Math.floor(Math.random() * sizes.length)])
   console.log(random_size);
+  await page.waitForTimeout(2000);
   await page.getByLabel(random_size, { exact: true }).click();
 
   const colors = ["Yellow", "White", "Purple"]
   var random_color = String(colors[Math.floor(Math.random() * colors.length)])
   console.log(random_color);
+
   await page.getByLabel(random_color, {exact: true}).click();
-  
+  await page.waitForTimeout(2000);
   await page.getByRole('button', { name: 'Add to Cart' }).click();
 });
 

@@ -9,6 +9,29 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
+// Define the environment-specific configurations
+const env = process.env.ENV || 'dev';
+
+
+//Set an envConfig object with different base URLs for each environment
+const envConfig = {
+  dev: {
+    ugBaseUrl: 'https://magento.softwaretestingboard.com/',
+    bwBaseUrl: 'https://shop.demoqa.com/shop/'
+  },
+  uat: { 
+    ugBaseUrl: 'https://magento.softwaretestingboard.com/'
+  },
+  prod: {
+    ugBaseUrl: 'https://magento.softwaretestingboard.com/'
+  }
+}
+
+
+// Select the configuration based on the environment
+const config = envConfig[env];
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -24,7 +47,9 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
+  
     // baseURL: 'http://127.0.0.1:3000',
+    baseURL: config.ugBaseUrl,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -75,3 +100,6 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
+
+// Export the specific URLs for easy access
+export const { ugBaseUrl, bwBaseUrl } = config;
